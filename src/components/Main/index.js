@@ -42,7 +42,7 @@ const Main = () => {
 
             Quagga.onDetected(onDetected)
         }
-    }, [])
+    }, [onDetected])
 
     return (
         <>
