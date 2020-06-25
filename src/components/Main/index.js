@@ -46,7 +46,6 @@ const Main = () => {
                 Quagga.offDetected()
                 Quagga.stop()
                 setModalIsVisible(true)
-                initCam()
             })
         }
     }
