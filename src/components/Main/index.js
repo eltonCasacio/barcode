@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Quagga from 'quagga'
 
 import { Video, Container, ScanMarker } from './styles'
