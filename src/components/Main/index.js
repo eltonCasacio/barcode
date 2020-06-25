@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Component } from 'react'
 import Quagga from 'quagga'
+import Modal from '../Modal'
 
 import { Video, Container, ScanMarker } from './styles'
 
 const Main = () => {
 
     const [readFilecode, setReadFilecode] = useState({})
+    const [modalIsVisible, setModalIsVisible] = useState(false)
 
-
-    function initCam() {
+    const initCam = () => {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
             Quagga.init(
@@ -37,24 +38,27 @@ const Main = () => {
                 }
             );
 
-            Quagga.onDetected(function (result) {
+            Quagga.onDetected(result => {
+                setReadFilecode(prevState => {
+                    return Object.assign(prevState, result.codeResult)
+                })
+               
                 Quagga.offDetected()
                 Quagga.stop()
-
-                console.log('Resultado da leitura :: ', result.codeResult)
-                setReadFilecode(result.codeResult)
+                setModalIsVisible(true)
+                initCam()
             })
         }
+    }
+
+    const closeModal = () => {
+        setModalIsVisible(false)
+        initCam()
     }
 
     useEffect(() => {
         initCam()
     }, [])
-
-    useEffect(() => {
-        initCam()
-    }, [readFilecode])
-
 
     return (
         <>
@@ -72,8 +76,14 @@ const Main = () => {
                     width="137"
                     height="69"
                 />
-
             </Container>
+
+            {modalIsVisible && (
+                <Modal
+                    onClose={closeModal}
+                    value={readFilecode}
+                />
+            )}
         </>
     )
 }
