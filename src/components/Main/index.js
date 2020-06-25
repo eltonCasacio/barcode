@@ -37,12 +37,12 @@ const Main = () => {
                     }
                     console.log("Initialization finished. Ready to start");
                     Quagga.start();
+                    Quagga.onDetected(onDetected)
                 }
             );
 
-            Quagga.onDetected(onDetected)
         }
-    }, [onDetected])
+    }, [])
 
     return (
         <>
