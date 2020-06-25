@@ -9,40 +9,41 @@ const Main = () => {
         Quagga.offDetected(onDetected)
 
         let codeResult = result.codeResult.code
-        console.log('Resultado da leitura :: ',codeResult)
+        console.log('Resultado da leitura :: ', codeResult)
         alert(codeResult)
     }
-    useEffect(() => {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            Quagga.init(
-                {
-                    inputStream: {
-                        name: "Live",
-                        type: "LiveStream",
-                        target: document.querySelector('#camera'),
-                        constraints: {
-                            facingMode: 'environment',
-                        }
-                    },
-                    numOfWorkers: 1,
-                    locate: false,
-                    decoder: {
-                        readers: ["ean_reader"]
+
+    const init = () => {
+        Quagga.init(
+            {
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: document.querySelector('#camera'),
+                    constraints: {
+                        facingMode: 'environment',
                     }
                 },
-                function (err) {
-                    if (err) {
-                        console.log(err);
-                        return
-                    }
-                    console.log("Initialization finished. Ready to start");
-                    Quagga.start();
-                    Quagga.onDetected(onDetected)
+                numOfWorkers: 1,
+                locate: false,
+                decoder: {
+                    readers: ["ean_reader"]
                 }
-            );
+            },
+            function (err) {
+                if (err) {
+                    console.log(err);
+                    return
+                }
+                console.log("Initialization finished. Ready to start");
+                Quagga.start();
+            });
+        Quagga.onDetected(onDetected)
+    }
 
-        }
-    }, [onDetected])
+    useEffect(() => {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) init()
+    }, [])
 
     return (
         <>
