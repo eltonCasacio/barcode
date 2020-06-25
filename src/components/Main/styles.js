@@ -33,6 +33,16 @@ export const Container = styled.div`
         .logo {
             margin-bottom: 20px;
         }
+
+        .button {
+            position:absolute;
+            width:130px;
+            height:130px;
+            border-radius: 200px;
+
+            background-color:teal;
+            border: solid 2px #000;
+        }
     `;
 
 export const ScanMarker = styled.div`
@@ -57,5 +67,4 @@ export const ScanMarker = styled.div`
         font-style: italic;
         margin-top: 20px;
     }
-
     `;

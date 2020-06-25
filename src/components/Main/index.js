@@ -1,20 +1,16 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Quagga from 'quagga'
 
 import { Video, Container, ScanMarker } from './styles'
 
 const Main = () => {
 
-    const onDetected = result => {
-        Quagga.offDetected(onDetected)
+    const [readFilecode, setReadFilecode] = useState({})
 
-        let codeResult = result.codeResult
-        console.log('Resultado da leitura :: ', codeResult)
-        alert(codeResult)
-    }
 
-    const init = () => {
+    function initCam() {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+
             Quagga.init(
                 {
                     inputStream: {
@@ -29,19 +25,36 @@ const Main = () => {
                     locate: false,
                     decoder: {
                         readers: ["ean_reader"]
-                    }
+                    },
                 },
-                function (err) {
+                (err) => {
                     if (err) {
                         console.log(err);
                         return
                     }
                     console.log("Initialization finished. Ready to start");
                     Quagga.start();
-                });
-            Quagga.onDetected(onDetected)
+                }
+            );
+
+            Quagga.onDetected(function (result) {
+                Quagga.offDetected()
+                Quagga.stop()
+
+                console.log('Resultado da leitura :: ', result.codeResult)
+                setReadFilecode(result.codeResult)
+            })
         }
     }
+
+    useEffect(() => {
+        initCam()
+    }, [])
+
+    useEffect(() => {
+        initCam()
+    }, [readFilecode])
+
 
     return (
         <>
@@ -60,7 +73,6 @@ const Main = () => {
                     height="69"
                 />
 
-                <button onClick={init}>Ler</button>
             </Container>
         </>
     )
